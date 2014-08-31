@@ -1,35 +1,46 @@
 
 from selenium import webdriver
-browser = webdriver.Firefox()
+import unittest
 
-# Get the home page of our application:
-browser.get('http://localhost:8000')
+class NewVisitorTest(unittest.TestCase):
 
-# Check for our initial code change - check To-Do appears in the title:
-assert 'Django' in browser.title
+    def setUp(self):
+        self.browser = webdriver.Firefox()
 
-# TODO: You are invited to do a todo item straight away
+    def tearDown(self):
+        # Close the browser now:
+        self.browser.quit()
 
-# TODO: You type 'Buy peacock feathers' into a text box
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        # Get the home page of our application:
+        self.browser.get('http://localhost:8000')
 
-# TODO: When you hit enter, the page updates, and page now lists
-# TODO: '1: Buy peacock feathers' as an item in the to-do list
+        # Check for our initial code change - check To-Do appears in the title:
+        self.assertIn('To-Do', self.browser.title)
+        self.fail('Finish the test!')
 
-# TODO: There is still a text box inviting heer to add another item
-# TODO: You enter 'Use peacock feathers to make a fly'
+        # TODO: You are invited to do a todo item straight away
 
-# TODO: The page updates again and now shows both entries.
+        # TODO: You type 'Buy peacock feathers' into a text box
 
-# TODO: Will the site remember the list?  The site should have generated a
-# TODO: unique URL ... explanatory text to that effect
+        # TODO: When you hit enter, the page updates, and page now lists
+        # TODO: '1: Buy peacock feathers' as an item in the to-do list
 
-# TODO: You visit the URL - the to-do list is still there
+        # TODO: There is still a text box inviting heer to add another item
+        # TODO: You enter 'Use peacock feathers to make a fly'
 
-# TODO: All is OK
+        # TODO: The page updates again and now shows both entries.
 
-# Close the browser now:
-browser.quit()
+        # TODO: Will the site remember the list?  The site should have generated a
+        # TODO: unique URL ... explanatory text to that effect
 
+        # TODO: You visit the URL - the to-do list is still there
+
+        # TODO: All is OK
+
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
 
 
 
