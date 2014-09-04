@@ -16,7 +16,12 @@ class HomePageTest(TestCase):
         #self.assertTrue(response.content.startswith(b'<html>'))
         #self.assertIn(b'<title>To-Do lists</title>', response.content)
         #self.assertTrue(response.content.strip().endswith(b'</html>'))
-        expected_html = render_to_string('home.html')
+
+        self.assertIn('A new list item', response.content.decode())
+        expected_html = render_to_string(
+	    'home.html',
+	    {'new_item_text': 'A new list item'}
+	)
         self.assertEqual(response.content.decode(), expected_html)
 
 
