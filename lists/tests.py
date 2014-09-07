@@ -1,12 +1,13 @@
 from django.core.urlresolvers import resolve
-from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from django.test import TestCase
 
-from lists.views import home_page
 from lists.models import Item
+from lists.views import home_page
 
 class HomePageTest(TestCase):
+
     def test_root_url_resolves_to_home_page_view(self):
         found = resolve('/')
         self.assertEqual(found.func, home_page)
@@ -55,6 +56,7 @@ class HomePageTest(TestCase):
         self.assertEqual(Item.objects.count(), 0)
 
 class ItemModelTest(TestCase):
+
     def test_saving_and_retrieving_items(self):
         first_item = Item()
         first_item.text = 'The first (ever) list item'
@@ -71,4 +73,16 @@ class ItemModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, 'The first (ever) list item')
         self.assertEqual(second_saved_item.text, 'Item the second')
+
+class ListViewTest(TestCase):
+
+    def test_displays_all_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+
+        self.assertContains(response, 'itemey 1')
+        self.assertContains(response, 'itemey 2')
+
 
