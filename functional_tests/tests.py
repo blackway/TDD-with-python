@@ -3,8 +3,6 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-import unittest
-
 class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
@@ -95,11 +93,6 @@ class NewVisitorTest(LiveServerTestCase):
 
         # TODO: All is OK
         self.fail('Finish the test!')
-
-
-#unittest.main(warnings='ignore')
-
-
 
 
 
