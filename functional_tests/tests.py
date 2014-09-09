@@ -92,3 +92,6 @@ class NewVisitorTest(LiveServerTestCase):
 
         # TODO: You visit the URL - the to-do list is still there
 
+        # More Windows errors seen ...
+        print("Printing to stdout (under Windows) seems to prevent connection error")
+
