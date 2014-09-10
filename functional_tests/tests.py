@@ -61,7 +61,8 @@ class NewVisitorTest(LiveServerTestCase):
         # of Edith's is coming through from the cookies etc
         # NOTE: THIS is FAILING on WINDOWS:
         #       WinError 10061 - connection actively refused
-        print("Printing to stdout (under Windows) seems to prevent connection error")
+        #print("Printing to stdout (under Windows) seems to prevent connection error")
+        self.browser.refresh()
         self.browser.quit()
         self.browser = webdriver.Firefox()
 
@@ -93,5 +94,6 @@ class NewVisitorTest(LiveServerTestCase):
         # TODO: You visit the URL - the to-do list is still there
 
         # More Windows errors seen ...
-        print("Printing to stdout (under Windows) seems to prevent connection error")
+        self.browser.refresh()
+        #print("Printing to stdout (under Windows) seems to prevent connection error")
 
