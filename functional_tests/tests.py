@@ -1,15 +1,14 @@
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
-        # Close the browser now:
         self.browser.quit()
 
 
@@ -20,33 +19,37 @@ class NewVisitorTest(LiveServerTestCase):
 
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        # Get the home page of our application:
+        # Edith has heard about a cool new online to-do app. She goes
+        # to check out its homepage
         self.browser.get(self.live_server_url)
 
-        # Page title and header contain 'To-Do' lists
+        # She notices the page title and header mention to-do lists
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
 
-        # She is invited to do a todo item straight away
+        # She is invited to enter a to-do item straight away
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
-            inputbox.get_attribute('placeholder'),
-            'Enter a to-do item'
+                inputbox.get_attribute('placeholder'),
+                'Enter a to-do item'
         )
 
-        # She types 'Buy peacock feathers' into a text box
+        # She types "Buy peacock feathers" into a text box (Edith's hobby
+        # is tying fly-fishing lures)
         inputbox.send_keys('Buy peacock feathers')
 
-        # When she hits enter, the page updates, and page now lists
-        # '1: Buy peacock feathers' as an item in the to-do list
+        # When she hits enter, she is taken to a new URL,
+        # and now the page lists "1: Buy peacock feathers" as an item in a
+        # to-do list table
         inputbox.send_keys(Keys.ENTER)
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
-        # There is still a text box inviting her to add another item
-        # She enters 'Use peacock feathers to make a fly'
+        # There is still a text box inviting her to add another item. She
+        # enters "Use peacock feathers to make a fly" (Edith is very
+        # methodical)
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Use peacock feathers to make a fly')
         inputbox.send_keys(Keys.ENTER)
@@ -57,23 +60,21 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Now a new user, Francis, comes along to the site.
 
-        # We use a new browser sessionto make sure that no information
-        # of Edith's is coming through from the cookies etc
-        # NOTE: THIS is FAILING on WINDOWS:
-        #       WinError 10061 - connection actively refused
-        #print("Printing to stdout (under Windows) seems to prevent connection error")
-        self.browser.refresh()
+        ## We use a new browser session to make sure that no information
+        ## of Edith's is coming through from cookies etc
+        self.browser.refresh() # To prevent Windows connection error
         self.browser.quit()
         self.browser = webdriver.Firefox()
 
-        # Francis visits the home page.  There is no sign of Edith's list
+        # Francis visits the home page.  There is no sign of Edith's
+        # list
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertNotIn('make a fly', page_text)
 
-        # Francis starts a new list by entering a new item.
-        # He is less interesting than Edith...
+        # Francis starts a new list by entering a new item. He
+        # is less interesting than Edith...
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
@@ -88,12 +89,33 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
 
-        # TODO: Will the site remember the list?  The site should have generated a
-        # TODO: unique URL ... explanatory text to that effect
+        # Satisfied, they both go back to sleep
+        self.browser.refresh() # To prevent Windows connection error
 
-        # TODO: You visit the URL - the to-do list is still there
 
-        # More Windows errors seen ...
-        self.browser.refresh()
-        #print("Printing to stdout (under Windows) seems to prevent connection error")
+    def test_layout_and_styling(self):
+        # Edith goes to the home page
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        # She notices the input box is nicely centered
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            # fails, so try 10: delta=5
+            delta=10
+        )
+
+        # She starts a new list and sees the input is nicely
+        # centered there too
+        inputbox.send_keys('testing\n')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            # fails, so try 10: delta=5
+            delta=10
+        )
+        self.browser.refresh() # To prevent Windows connection error
 
