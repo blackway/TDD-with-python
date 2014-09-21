@@ -1,10 +1,16 @@
 
-CODE=$HOME/z/bin/py/TDD-with-Python/superlists
+#CODE=$HOME/z/bin/py/TDD-with-Python/superlists
+CODE=$HOME/z/bin/py/TDD-with-Python/
 
 PYTHON=python3
 
 # On Windows machine, use Anaconda Python (which is Python3):
 [ `hostname` = "MJBRIGHT7" ] && PYTHON=python # python3/Anaconda
+
+[ `hostname` = "c34eded3f31a" ] && {
+    CODE=$HOME/src/git/TDD-with-python/
+    PYTHON=../TDD-with-python.VE/bin/python3
+} # python # python3/Anaconda
 
 ########################################
 # Utility functions:
@@ -35,6 +41,8 @@ sshtunnel() {
 
 runserver() {
     cd $CODE
+
+    echo "[$PWD] $PYTHON manage.py runserver"
     $PYTHON manage.py runserver
 }
 
