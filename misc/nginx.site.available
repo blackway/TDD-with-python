@@ -1,0 +1,16 @@
+
+server {
+    listen 8080;
+    server_name 127.0.0.1;
+
+    location /static {
+        alias /home/user/sites/127.0.0.1/static;
+    }
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_pass http://unix:/tmp/site127.0.0.1;
+        #proxy_pass http://localhost:8000;
+    }
+}
+

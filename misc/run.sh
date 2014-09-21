@@ -1,7 +1,10 @@
 
 CODE=$HOME/z/bin/py/TDD-with-Python/superlists
 
-PYTHON=python # python3/Anaconda
+PYTHON=python3
+
+# On Windows machine, use Anaconda Python (which is Python3):
+[ `hostname` = "MJBRIGHT7" ] && PYTHON=python # python3/Anaconda
 
 ########################################
 # Utility functions:
