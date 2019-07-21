@@ -1,3 +1,4 @@
-django==1.7
+Django==1.8.19
 gunicorn==18.0
-selenium
+selenium==3.141.0
+urllib3==1.25.3
